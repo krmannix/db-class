@@ -61,13 +61,13 @@ CREATE TABLE comment (
 ############ Relation tables ############
 
 # Friend
-CREATE TABLE friend (
+CREATE TABLE friends (
 	user_id_1 int,
 	user_id_2 int
 );
 
 # Likes
-CREATE TABLE like (
+CREATE TABLE likes (
 	user_id int,
 	photo_id int
 );
@@ -114,11 +114,11 @@ INSERT INTO user (
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 # Insert friendship
-IF NOT EXISTS (SELECT * FROM friend WHERE user_id_1 = ? AND user_id_2 = ?)
+IF NOT EXISTS (SELECT * FROM friends WHERE user_id_1 = ? AND user_id_2 = ?)
 AND 
-IF NOT EXISTS (SELECT * FROM friend WHERE user_id_2 = ? AND user_id_1 = ?)
+IF NOT EXISTS (SELECT * FROM friends WHERE user_id_2 = ? AND user_id_1 = ?)
 THEN 
-	INSERT INTO friend (user_id_1, user_id_2) VALUES (?, ?);
+	INSERT INTO friends (user_id_1, user_id_2) VALUES (?, ?);
 END IF; # Values (user_id_1, user_id_2, user_id_1, user_id_2, user_id_1, user_id_2)
 
 # User Activity
@@ -186,9 +186,47 @@ SELECT t.* FROM tag t
 WHERE t.tag_id IN (SELECT COUNT(*) FROM tag_photo tp
 				   GROUP BY tp.tag_id DESC LIMIT 10);
 
+############ Comments ############
 
+# Add comment
+INSERT INTO comment (comment_id, text, user_id, created_at) VALUES (cast((RAND()*1000) as int), ?, ?, CURDATE());
 
+# Like a photo
+IF NOT EXISTS (SELECT * FROM likes WHERE user_id = ? AND photo_id = ?)
+THEN
+	INSERT INTO likes (user_id, photo_id) VALUES (?, ?);
+END IF;
 
+############ Recommendations ############
+
+# You may also like
+	# Get top 5 tags for user
+SELECT p2.*
+FROM photo
+WHERE p2.photo_id IN
+	(SELECT tp2.photo_id 
+	 FROM tag_photo tp2
+	 WHERE tp2.tag_id IN (SELECT tp.tag_id
+						  FROM tag_photo tp 
+						  WHERE tp.photo_id IN (SELECT p.photo_id FROM photo p 
+											    WHERE p.album_id IN (SELECT a.album_id FROM album a 
+																     WHERE a.user_id = ?)) GROUP BY tp.tag_id DESC LIMIT 5)
+	 AND tp2.photo_id <> tp.photo_id
+	 ORDER BY COUNT(tp2.photo_id));
+
+# Tag recommendation
+SELECT t3.tag_name 
+FROM tag t3 
+WHERE t3.tag_id IN (SELECT tp2.tag_id 
+					FROM tag_photo tp2
+					WHERE tp2.photo_id IN (SELECT tp.photo_id 
+										   FROM tag_photo tp 
+										   INNER JOIN tag t
+										   ON tp.tag_id = t.tag_id
+										   WHERE t.tag_name IN (?)) # ? = list of tags
+					AND tp2.tag_id NOT IN (SELECT t2.tag_name 
+										   FROM tag t2
+										   WHERE t.tag_name IN (?))); # ? = list of tags
 
 
 
