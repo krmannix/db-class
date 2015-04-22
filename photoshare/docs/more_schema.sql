@@ -11,7 +11,7 @@ CREATE TABLE Albums (
 	album_id int PRIMARY KEY DEFAULT nextval('Albums_album_id_seq'),
 	user_id int,
 	name varchar(200),
-	created_at date
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE pictures ADD album_id int;
