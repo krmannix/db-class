@@ -15,6 +15,8 @@ public class AlbumController {
 	private static final String MAKE_ALBUM = "INSERT INTO albums (user_id, name) VALUES (?, ?);";
 	private static final String SEARCH_ALBUMS = "SELECT * FROM albums WHERE user_id = ?;";
 	private static final String GET_ALBUM = "SELECT * FROM albums WHERE album_id = ?;";
+	private static final String GET_ALBUM_PHOTOS = "SELECT picture_id FROM Pictures WHERE album_id = ?;";
+	private static final String DELETE_ALBUM = "DELETE FROM Albums WHERE album_id = ?;";
 
 	public static void makeAlbum(int user_id, String name) {
 		PreparedStatement stmt = null;
@@ -123,5 +125,47 @@ public class AlbumController {
 			}
 		}
 		return album;
+	}
+
+	public static void deleteAlbum(int album_id, PictureDao pd) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(GET_ALBUM_PHOTOS);
+			stmt.setInt(1, album_id);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				int photo_id = rs.getInt("picture_id");
+				pd.deletePicture(photo_id);
+			}
+			stmt = conn.prepareStatement(DELETE_ALBUM);
+			stmt.setInt(1, album_id);
+			stmt.executeUpdate();
+
+			rs.close();
+			rs = null;
+			stmt.close();
+			stmt = null;
+			conn.close();
+			conn = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+      		throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
 	}
 }

@@ -67,7 +67,7 @@ public class User {
 		this.home_city = h_city;
 		this.home_country = h_country;
 		this.home_state = h_state;
-		this.dob = new java.sql.Date(date.getTime());
+		// this.dob = new java.sql.Date(date.getTime());
 	}
 
 	public Date getDOB() { return this.dob; }

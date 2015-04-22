@@ -19,3 +19,13 @@ html, body {
 .row img {
 	width: 80%;
 }
+
+.all-photos {
+	list-style-type: none;
+	margin-bottom: 100px;
+}
+
+.all-photos img {
+	max-height: 90px;
+	margin: 0 auto;
+}

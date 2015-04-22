@@ -61,7 +61,7 @@
                         <br />
                         <br />
                         <br />
-                        <b><%= numLikes %> likes for this photo</b>
+                        <span class="badge"><%= numLikes %></span> likes for this photo
                         <%
                             if (request.getUserPrincipal() != null) {
                                 int user_id_like = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
