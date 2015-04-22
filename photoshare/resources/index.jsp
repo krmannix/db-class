@@ -3,6 +3,7 @@
 --%>
 <%@ page import="photoshare.Picture" %>
 <%@ page import="photoshare.PictureDao" %>
+<%@ page import="photoshare.UserController" %>
 <%@ page import="org.apache.commons.fileupload.FileUploadException" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

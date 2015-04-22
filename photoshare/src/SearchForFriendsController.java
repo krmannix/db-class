@@ -30,8 +30,7 @@ public class SearchForFriendsController {
 			else
 				stmt.setString(2, '%' + names[0] + '%');
 			rs = stmt.executeQuery();
-			if (rs.next()) {
-				// foundUsers.add(new User());
+			while (rs.next()) {
 				foundUsers.add(new User(rs.getInt("user_id"),
 					rs.getString("first_name"), rs.getString("last_name"), 
 					rs.getString("email"), rs.getString("password"), rs.getBoolean("male"), rs.getTimestamp("dob"),
