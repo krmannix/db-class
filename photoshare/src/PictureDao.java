@@ -21,6 +21,9 @@ public class PictureDao {
 
   private static final String ALL_PICTURE_IDS_STMT = "SELECT \"picture_id\" FROM Pictures ORDER BY \"picture_id\" DESC";
 
+  private static final String PICTURES_BY_ALBUM = "SELECT " +
+      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures WHERE \"album_id\" = ?";
+
   public Picture load(int id) {
 		PreparedStatement stmt = null;
 		Connection conn = null;
@@ -29,7 +32,7 @@ public class PictureDao {
     try {
 			conn = DbConnection.getConnection();
 			stmt = conn.prepareStatement(LOAD_PICTURE_STMT);
-      stmt.setInt(1, id);
+      		stmt.setInt(1, id);
 			rs = stmt.executeQuery();
       if (rs.next()) {
         picture = new Picture();
@@ -146,5 +149,57 @@ public class PictureDao {
 		}
 
 		return picturesIds;
+	}
+
+	public List<Picture> getPicturesByAlbumId(int album_id) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		
+		List<Picture> allPics = new ArrayList<Picture>();
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(PICTURES_BY_ALBUM);
+			stmt.setInt(1, album_id);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+		        Picture picture = new Picture();
+		        picture.setCaption(rs.getString(1));
+		        picture.setData(rs.getBytes(2));
+		        picture.setThumbdata(rs.getBytes(3));
+		        picture.setSize(rs.getLong(4));
+		        picture.setContentType(rs.getString(5));
+		        picture.setAlbumId(rs.getInt(6));
+		        picture.setId(rs.getInt(7));
+		        allPics.add(picture);
+		      }
+
+			rs.close();
+			rs = null;
+
+			stmt.close();
+			stmt = null;
+
+			conn.close();
+			conn = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+
+		return allPics;
 	}
 }
