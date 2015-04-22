@@ -14,6 +14,7 @@ import java.io.IOException;
  */
 public class Picture {
   private int id;
+  private int album_id;
   private String caption = "";
   private String contentType;
   private long size;
@@ -30,6 +31,14 @@ public class Picture {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public int getAlbumId() {
+    return album_id;
+  }
+
+  public void setAlbumId(int album_id) {
+    this.album_id = album_id;
   }
 
   public String getCaption() {

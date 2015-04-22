@@ -90,7 +90,22 @@
                             <h2>Upload a new picture</h2>
                             <form action="index.jsp" enctype="multipart/form-data" method="post">
                                 Filename: <input type="file" name="filename"/>
-                                <input type="submit" value="Upload"/><br/>
+                                <select name="album_id">
+                                    <%
+                                        for (Album album : foundAlbums) {
+                                    %>
+                                            <option value="<%= album.album_id %>"><%= album.name %></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                                <br />
+                                <div class="input-group">
+                                    <input type="text" name="caption" size=100 />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Upload</button>
+                                    </spa>
+                                </div>
                             </form>
                             <%
                                 PictureDao pictureDao = new PictureDao();

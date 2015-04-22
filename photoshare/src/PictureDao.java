@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class PictureDao {
   private static final String LOAD_PICTURE_STMT = "SELECT " +
-      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\" FROM Pictures WHERE \"picture_id\" = ?";
+      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\" FROM Pictures WHERE \"picture_id\" = ?";
 
   private static final String SAVE_PICTURE_STMT = "INSERT INTO " +
-      "Pictures (\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\") VALUES (?, ?, ?, ?, ?)";
+      "Pictures (\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\" ) VALUES (?, ?, ?, ?, ?, ?)";
 
   private static final String ALL_PICTURE_IDS_STMT = "SELECT \"picture_id\" FROM Pictures ORDER BY \"picture_id\" DESC";
 
@@ -39,6 +39,7 @@ public class PictureDao {
         picture.setThumbdata(rs.getBytes(3));
         picture.setSize(rs.getLong(4));
         picture.setContentType(rs.getString(5));
+        picture.setAlbumId(rs.getInt(6));
       }
 
 			rs.close();
@@ -81,6 +82,7 @@ public class PictureDao {
 			stmt.setBytes(3, picture.getThumbdata());
 			stmt.setLong(4, picture.getSize());
 			stmt.setString(5, picture.getContentType());
+			stmt.setInt(6, picture.getAlbumId());
 			stmt.executeUpdate();
 			
 			stmt.close();
