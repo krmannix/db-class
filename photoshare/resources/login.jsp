@@ -87,10 +87,10 @@
 					        	<input type=text name="year" size=4 value=1993>
 					        </td></tr>
 					        <tr><th>Home City</th><td><input type="text" name="h_city"></td></tr>
-					        <tr><th>Home State</th><td><input type="text" size=2 name="h_state"></td></tr>
+					        <tr><th>Home State</th><td><input type="text" size=2 maxlength="2" name="h_state"></td></tr>
 					        <tr><th>Home Country</th><td><input type="text" name="h_country"></td></tr>
 					        <tr><th>Current City</th><td><input type="text" name="c_city"></td></tr>
-					        <tr><th>Current State</th><td><input type="text" size=2 name="c_state"></td></tr>
+					        <tr><th>Current State</th><td><input type="text" size=2 maxlength="2" name="c_state"></td></tr>
 					        <tr><th>Current Country</th><td><input type="text" name="c_country"></td></tr>
 					        <tr><td colspan="2" align="right"><input type="submit" value="Submit"/>
 					        </td></tr>

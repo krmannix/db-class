@@ -24,16 +24,6 @@
 			String h_city = request.getParameter("h_city");
 			String h_state = request.getParameter("h_state");
 			String h_country = request.getParameter("h_country");
-			out.println(firstName);
-			out.println(lastName);
-			out.println(password);
-			out.println(gender);
-			out.println(bday);
-			out.println(bmonth);
-			out.println(byear);
-			out.println("Printed");
-			out.println("IS THIS FALSE?? ");
-			out.println(RegistrationController.userExists(email));
 			if (RegistrationController.validateUser(firstName, lastName, email, password, gender, bday, bmonth, byear, c_city, c_state, c_country, h_city, h_state, h_country)) {
 				User newUser = new User(firstName, lastName, email, password, gender, bday, bmonth, byear, c_city, c_state, c_country, h_city, h_state, h_country);
 				RegistrationController.registerUser(newUser);
