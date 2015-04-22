@@ -7,6 +7,7 @@
 <%@ page import="photoshare.AlbumController" %>
 <%@ page import="photoshare.Comment" %>
 <%@ page import="photoshare.CommentController" %>
+<%@ page import="photoshare.LikeController" %>
 <%@ page import="photoshare.Picture" %>
 <%@ page import="photoshare.PictureDao" %>
 <%@ page import="java.util.List" %>
@@ -36,18 +37,53 @@
         <div class="container">
             <% if (request.getParameter("photo_id") != null) {
                     int photo_id = Integer.parseInt(request.getParameter("photo_id"));
+                    if (request.getParameter("like") != null && request.getUserPrincipal() != null) {
+                        if (request.getParameter("like").equals("like")) {
+                            int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
+                            LikeController.makeLike(user_id, photo_id);
+                        } else {
+                            int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
+                            LikeController.deleteLike(user_id, photo_id);
+                        }
+                    }   
                     if (request.getParameter("comment_text") != null && request.getUserPrincipal() != null) {
                         int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
                         CommentController.makeComment(user_id, photo_id, request.getParameter("comment_text"));
-                        out.println("IN HERE " + request.getParameter("comment_text"));
                     }
+                    int numLikes = LikeController.getLikesForPhoto(photo_id);
                     PictureDao pictureDao = new PictureDao();
                     Picture pic = pictureDao.load(photo_id);
                     List<Comment> comments = CommentController.getCommentsForPhoto(pic.getId());
             %>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 text-center">
                         <img src="/photoshare/img?picture_id=<%= photo_id %>" />
+                        <br />
+                        <br />
+                        <br />
+                        <b><%= numLikes %> likes for this photo</b>
+                        <%
+                            if (request.getUserPrincipal() != null) {
+                                int user_id_like = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
+                                if (LikeController.userLikePhoto(photo_id, user_id_like)) {
+                                    %>
+                                    <a href="/photoshare/photo.jsp?photo_id=<%= photo_id %>&like=unlike">
+                                        <button type="button" class="btn btn-warning btn-lg">
+                                          Unlike Photo
+                                        </button>
+                                    </a>
+                                    <%
+                                } else {
+                                    %>
+                                    <a href="/photoshare/photo.jsp?photo_id=<%= photo_id %>&like=like">
+                                        <button type="button" class="btn btn-default btn-lg">
+                                          Like Photo
+                                        </button>
+                                    </a>
+                                    <%
+                                }
+                            }
+                        %>
                     </div>
                     <div class="col-sm-6">
                         <ul class="list-group">
