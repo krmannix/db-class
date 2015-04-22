@@ -8,6 +8,7 @@ public class TagController {
 	private static final String INSERT_TAG = "INSERT INTO Tag (tag_name) VALUES (?) RETURNING tag_id;";
 	private static final String INSERT_TAG_PHOTO = "INSERT INTO Tag_photo (tag_id, photo_id) VALUES (?, ?);";
 	private static final String GET_ALL_TAGS = "SELECT * FROM Tag";
+	private static final String GET_TAG_BY_ID = "SELECT * FROM Tag WHERE tag_id = ?;";
 	private static final String GET_ALL_TAGS_BY_USER = "SELECT t.* FROM Tag t " +
 						"INNER JOIN tag_photo tp ON tp.tag_id = t.tag_id " +
 						"WHERE tp.photo_id IN " +
@@ -77,6 +78,39 @@ public class TagController {
 			}
 		}
 		return allTags;
+	}
+
+	public static Tag getTagById(int tag_id) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		Tag tag = null;
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(GET_TAG_BY_ID);
+			stmt.setInt(1, tag_id);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				tag = new Tag(rs.getInt("tag_id"), rs.getString("tag_name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+      		throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+		return tag;
 	}
 
 	public static void setPhotoTags(int p_id, String tagstring) {

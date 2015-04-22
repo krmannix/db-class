@@ -24,6 +24,15 @@ public class PictureDao {
   private static final String PICTURES_BY_ALBUM = "SELECT " +
       "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures WHERE \"album_id\" = ?;";
 
+  private static final String PICTURES_BY_TAG = "SELECT " +
+      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures " +
+      "INNER JOIN Tag_photo ON photo_id = picture_id WHERE \"tag_id\" = ?;";
+
+  private static final String PICTURES_BY_TAG_AND_USER = "SELECT " +
+      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures " +
+      "INNER JOIN Tag_photo ON photo_id = picture_id WHERE \"tag_id\" = ? AND album_id IN (SELECT a.album_id FROM Albums a WHERE a.user_id = ?);";
+
+
   public Picture load(int id) {
 		PreparedStatement stmt = null;
 		Connection conn = null;
@@ -207,4 +216,110 @@ public class PictureDao {
 
 		return allPics;
 	}
+
+	public List<Picture> getPicturesByTagID(int tag_id) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		
+		List<Picture> allPics = new ArrayList<Picture>();
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(PICTURES_BY_TAG);
+			stmt.setInt(1, tag_id);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+		        Picture picture = new Picture();
+		        picture.setCaption(rs.getString(1));
+		        picture.setData(rs.getBytes(2));
+		        picture.setThumbdata(rs.getBytes(3));
+		        picture.setSize(rs.getLong(4));
+		        picture.setContentType(rs.getString(5));
+		        picture.setAlbumId(rs.getInt(6));
+		        picture.setId(rs.getInt(7));
+		        allPics.add(picture);
+		      }
+
+			rs.close();
+			rs = null;
+
+			stmt.close();
+			stmt = null;
+
+			conn.close();
+			conn = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+
+		return allPics;
+	}
+
+		public List<Picture> getPicturesByTagIDandUserID(int tag_id, int user_id) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		
+		List<Picture> allPics = new ArrayList<Picture>();
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(PICTURES_BY_TAG_AND_USER);
+			stmt.setInt(1, tag_id);
+			stmt.setInt(2, user_id);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+		        Picture picture = new Picture();
+		        picture.setCaption(rs.getString(1));
+		        picture.setData(rs.getBytes(2));
+		        picture.setThumbdata(rs.getBytes(3));
+		        picture.setSize(rs.getLong(4));
+		        picture.setContentType(rs.getString(5));
+		        picture.setAlbumId(rs.getInt(6));
+		        picture.setId(rs.getInt(7));
+		        allPics.add(picture);
+		      }
+
+			rs.close();
+			rs = null;
+
+			stmt.close();
+			stmt = null;
+
+			conn.close();
+			conn = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+
+		return allPics;
+	}
+
 }

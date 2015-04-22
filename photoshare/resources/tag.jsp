@@ -32,7 +32,57 @@
             </div>
         </nav>
         <div class="container">
-        	
+        	<% 
+                int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
+                PictureDao pictureDao = new PictureDao();
+                Tag tag = TagController.getTagById(
+                    Integer.parseInt(request.getParameter("tag_id"))
+                );
+                if (request.getParameter("user_id") != null) {
+                    // Only show pictures for the user
+                    List<Picture> allPics = pictureDao.getPicturesByTagIDandUserID(
+                        Integer.parseInt(request.getParameter("tag_id")),
+                        Integer.parseInt(request.getParameter("user_id"))
+                    );
+                %>
+                    <h1>All photos tagged with <b><%= tag.tag_name %></b> by <b><code><%= request.getUserPrincipal().getName() %></code></b> </h1>
+                <%
+                    for (Picture picture : allPics) {
+                        int pictureId = picture.getId();
+                %>
+                        <a href="/photoshare/img?picture_id=<%= pictureId %>">
+                            <img src="/photoshare/img?t=1&picture_id=<%= pictureId %>"/>
+                        </a>
+                <%
+                    }
+                    if (allPics.size() == 0) {
+                %>
+                        <h4>No pictures in this album</h4>
+                <%
+                    }
+                } else {
+                    // Show all pictures with this tag
+                    List<Picture> allPics = pictureDao.getPicturesByTagID(
+                        Integer.parseInt(request.getParameter("tag_id"))
+                    );
+                %>
+                    <h1>All photos tagged with <b><%= tag.tag_name %></b></h1>
+                    <%
+                            for (Picture picture : allPics) {
+                                int pictureId = picture.getId();
+                    %>
+                                <a href="/photoshare/img?picture_id=<%= pictureId %>">
+                                    <img src="/photoshare/img?t=1&picture_id=<%= pictureId %>"/>
+                                </a>
+                    <%
+                            }
+                            if (allPics.size() == 0) {
+                    %>
+                                <h4>No pictures in this album</h4>
+                    <%
+                            }
+                 }
+                    %>
         </div>
     </body>
 </html>
