@@ -3,6 +3,7 @@
 --%>
 <%@ page import="photoshare.Picture" %>
 <%@ page import="photoshare.PictureDao" %>
+<%@ page import="photoshare.TagController" %>
 <%@ page import="photoshare.UserController" %>
 <%@ page import="photoshare.AlbumController" %>
 <%@ page import="photoshare.Album" %>
@@ -43,6 +44,9 @@
                       <div class="panel-heading">
                         <h3 class="panel-title">
                             Hello <b><code><%= request.getUserPrincipal().getName() %></code></b>
+                            <%
+                                int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
+                            %>
                         </h3>
                       </div>
                       <div class="panel-body">
@@ -56,8 +60,8 @@
                         </div>
                         <ul class="list-group">
                             <li class="list-group-item"><a href="/photoshare/AllFriendsHandler.jsp">View Your Friends</a></li>
-                            <li class="list-group-item"><a href="#">View Your Tags</a></li>
-                            <li class="list-group-item"><a href="#">View All Tags</a></li>
+                            <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp?user_id=<%= user_id %>">View Your Tags</a></li>
+                            <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp">View All Tags</a></li>
                             <li class="list-group-item"><a href="#">View Popular Tags</a></li>
                             <li class="list-group-item"><a href="#">Recommendations</a></li>
                         </ul>
@@ -100,8 +104,10 @@
                                     %>
                                 </select>
                                 <br />
+                                <input type="text" name="tags" placeholder="Enter tags seperated by commas" size=100 />
+                                <br />
                                 <div class="input-group">
-                                    <input type="text" name="caption" size=100 />
+                                    <input type="text" name="caption" placeholder="Enter caption" size=100 />
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="submit">Upload</button>
                                     </spa>
@@ -112,7 +118,8 @@
                                 try {
                                     Picture picture = imageUploadBean.upload(request);
                                     if (picture != null) {
-                                        pictureDao.save(picture);
+                                        int p_id = pictureDao.save(picture);
+                                        TagController.setPhotoTags(p_id, picture.getTags());
                                     }
                                 } catch (FileUploadException e) {
                                     e.printStackTrace();

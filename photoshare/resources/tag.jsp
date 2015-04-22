@@ -1,8 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="photoshare.FriendController" %>
 <%@ page import="photoshare.UserController" %>
 <%@ page import="photoshare.User" %>
+<%@ page import="photoshare.TagController" %>
+<%@ page import="photoshare.Tag" %>
+<%@ page import="photoshare.Album" %>
+<%@ page import="photoshare.AlbumController" %>
+<%@ page import="photoshare.Picture" %>
+<%@ page import="photoshare.PictureDao" %>
 <%@ page import="java.util.List" %>
+
 <html>
     <head>
         <title>Photoshare</title>
@@ -26,29 +32,7 @@
             </div>
         </nav>
         <div class="container">
-            <%
-                if (request.getUserPrincipal() != null) {
-                    int self_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
-                    List<User> allFriends = FriendController.getFriends(self_id);
-                    if (allFriends.size() == 0) {
-            %>
-                        <h2>You have no friends!Go Back <a href="/photoshare/index.jsp">home</a></h2>
-            <%
-                    } else {
-                    %> <ul> <%
-                        for (User u : allFriends) {
-            %>
-                        <li><a href="/photoshare/user.jsp?user_id=<%= u.id%>"><%= u.first_name %> <%= u.last_name %></a></li>
-            <%
-                        }
-                        %> </ul> <%
-                    }
-                } else {
-            %>
-                <h2><a href="/photoshare/index.jsp">Log In</a> to see your friends!</h2>
-            <% 
-                } 
-            %>
+        	
         </div>
     </body>
 </html>

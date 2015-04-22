@@ -28,6 +28,8 @@ public class ImageUploadBean {
             picture.setCaption(fileItem.getString());
           } else if (fileItem.getFieldName().equals("album_id")) {
             picture.setAlbumId(Integer.parseInt(fileItem.getString()));
+          } else if (fileItem.getFieldName().equals("tags")) {
+            picture.setTags(fileItem.getString());
           }
         } else {
           if (fileItem.getFieldName().equals("filename")) {

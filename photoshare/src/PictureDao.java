@@ -14,15 +14,15 @@ import java.util.List;
  */
 public class PictureDao {
   private static final String LOAD_PICTURE_STMT = "SELECT " +
-      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\" FROM Pictures WHERE \"picture_id\" = ?";
+      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\" FROM Pictures WHERE \"picture_id\" = ?;";
 
   private static final String SAVE_PICTURE_STMT = "INSERT INTO " +
-      "Pictures (\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\" ) VALUES (?, ?, ?, ?, ?, ?)";
+      "Pictures (\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\" ) VALUES (?, ?, ?, ?, ?, ?) RETURNING picture_id;";
 
   private static final String ALL_PICTURE_IDS_STMT = "SELECT \"picture_id\" FROM Pictures ORDER BY \"picture_id\" DESC";
 
   private static final String PICTURES_BY_ALBUM = "SELECT " +
-      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures WHERE \"album_id\" = ?";
+      "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures WHERE \"album_id\" = ?;";
 
   public Picture load(int id) {
 		PreparedStatement stmt = null;
@@ -74,9 +74,11 @@ public class PictureDao {
 		return picture;
 	}
 
-	public void save(Picture picture) {
+	public int save(Picture picture) {
 		PreparedStatement stmt = null;
 		Connection conn = null;
+		ResultSet rs = null;
+		int p_id = -1;
 		try {
 			conn = DbConnection.getConnection();
 			stmt = conn.prepareStatement(SAVE_PICTURE_STMT);
@@ -86,8 +88,10 @@ public class PictureDao {
 			stmt.setLong(4, picture.getSize());
 			stmt.setString(5, picture.getContentType());
 			stmt.setInt(6, picture.getAlbumId());
-			stmt.executeUpdate();
-			
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				p_id = rs.getInt("picture_id");
+			}
 			stmt.close();
 			stmt = null;
 			
@@ -106,6 +110,7 @@ public class PictureDao {
 				conn = null;
 			}
 		}
+		return p_id;
 	}
 
 	public List<Integer> allPicturesIds() {

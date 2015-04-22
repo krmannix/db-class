@@ -16,6 +16,7 @@ public class Picture {
   private int id;
   private int album_id;
   private String caption = "";
+  private String tags = "";
   private String contentType;
   private long size;
   private byte[] data;
@@ -47,6 +48,14 @@ public class Picture {
 
   public void setCaption(String caption) {
     this.caption = caption;
+  }
+
+  public String getTags() {
+    return this.tags;
+  }
+
+  public void setTags(String tags) {
+    this.tags = tags;
   }
 
   public byte[] getData() {
