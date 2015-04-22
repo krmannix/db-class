@@ -135,7 +135,7 @@
                                         for (Integer pictureId : pictureIds) {
                                     %>
                                     <td>
-                                        <a href="/photoshare/img?picture_id=<%= pictureId %>">
+                                        <a href="/photoshare/photo.jsp?photo_id=<%= pictureId %>">
                                             <img src="/photoshare/img?t=1&picture_id=<%= pictureId %>"/>
                                         </a>
                                     </td>

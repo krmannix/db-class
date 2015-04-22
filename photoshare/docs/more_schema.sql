@@ -39,3 +39,27 @@ CREATE TABLE tag_photo (
 	tag_id int,
 	photo_id int
 );
+
+CREATE TABLE likes (
+	user_id int,
+	photo_id int
+);
+
+CREATE SEQUENCE Comments_comment_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 14
+  CACHE 1;
+
+CREATE TABLE comments (
+	comment_id int PRIMARY KEY DEFAULT nextval('Comments_comment_id_seq'),
+	text varchar(500),
+	user_id int,
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+	photo_id int
+);
+
+
+
+
