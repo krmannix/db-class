@@ -62,8 +62,10 @@
                             <li class="list-group-item"><a href="/photoshare/AllFriendsHandler.jsp">View Your Friends</a></li>
                             <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp?user_id=<%= user_id %>">View Your Tags</a></li>
                             <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp">View All Tags</a></li>
-                            <li class="list-group-item"><a href="#">View Popular Tags</a></li>
+                            <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp?popular=true">View Popular Tags</a></li>
                             <li class="list-group-item"><a href="#">Recommendations</a></li>
+                            <li class="list-group-item"><a href="#">Activity Leaderboards</a></li>
+                            <li class="list-group-item"><a href="#">Delete Albums and Photos</a></li>
                         </ul>
                       </div>
                     </div>

@@ -33,7 +33,6 @@
         </nav>
         <div class="container">
         	<% 
-                int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
                 PictureDao pictureDao = new PictureDao();
                 Tag tag = TagController.getTagById(
                     Integer.parseInt(request.getParameter("tag_id"))

@@ -26,40 +26,61 @@
         </nav>
         <div class="container">
             <%
-                if (request.getParameter("user_id") == null) {
-                    List<Tag> allTags = TagController.getAllTags();
-                    if (allTags.size() == 0) {
-            %>
-                        <h2>There are no tags! Go Back <a href="/photoshare/index.jsp">home</a></h2>
-            <%
+                if (request.getParameter("popular") != null) {
+                    // Show the most popular tags
+                    List<Tag> popTags = TagController.getPopularTags();
+                    if (popTags.size() == 0) {
+                        %> <h2>There are no tags! Go Back <a href="/photoshare/index.jsp">home</a></h2> <%
                     } else {
-                        %> <ul> <%
-                        for (Tag t : allTags) {
+                        %> <h2>Popular Tags </h2><br /><ol> <%
+                            for (Tag t : popTags) {
             %>
-                            <li>
-                                <a href="/photoshare/tag.jsp?tag_id=<%= t.tag_id %>"><%= t.tag_name %></a>
-                            </li>
+                                <li>
+                                    <a href="/photoshare/tag.jsp?tag_id=<%= t.tag_id %>"><%= t.tag_name %></a>
+                                </li>
             <%
-                        }
-                        %> </ul> <%
-                    }
+                            }
+                        %> </ol> <%
+
+                    }      
+            %>
+            <%
                 } else {
-                    int user_id = Integer.parseInt(request.getParameter("user_id"));
-                    List<Tag> allTags = TagController.getTagsByUserId(user_id);
-                    if (allTags.size() == 0) {
+                    if (request.getParameter("user_id") == null) {
+                        List<Tag> allTags = TagController.getAllTags();
+                        if (allTags.size() == 0) {
             %>
-                        <h2>There are no tags! Go Back <a href="/photoshare/index.jsp">home</a></h2>
+                            <h2>There are no tags! Go Back <a href="/photoshare/index.jsp">home</a></h2>
             <%
-                    } else {
-                        %> <ul> <%
-                        for (Tag t : allTags) {
+                        } else {
+                            %> <ul> <%
+                            for (Tag t : allTags) {
             %>
-                            <li>
-                                <a href="/photoshare/tag.jsp?tag_id=<%= t.tag_id %>&user_id=<%= user_id %>"><%= t.tag_name %></a>
-                            </li>
+                                <li>
+                                    <a href="/photoshare/tag.jsp?tag_id=<%= t.tag_id %>"><%= t.tag_name %></a>
+                                </li>
             <%
+                            }
+                            %> </ul> <%
                         }
-                        %> </ul> <%
+                    } else {
+                        int user_id = Integer.parseInt(request.getParameter("user_id"));
+                        List<Tag> allTags = TagController.getTagsByUserId(user_id);
+                        if (allTags.size() == 0) {
+            %>
+                            <h2>There are no tags! Go Back <a href="/photoshare/index.jsp">home</a></h2>
+            <%
+                        } else {
+                            %> <ul> <%
+                            for (Tag t : allTags) {
+            %>
+                                <li>
+                                    <a href="/photoshare/tag.jsp?tag_id=<%= t.tag_id %>&user_id=<%= user_id %>"><%= t.tag_name %></a>
+                                </li>
+            <%
+                            }
+                            %> </ul> <%
+                        }
                     }
                 }
             %>
