@@ -20,3 +20,5 @@ CREATE TABLE friends (
 	user_id_1 int4 NOT NULL,
 	user_id_2 int4 NOT NULL
 );
+
+SELECT * FROM Users WHERE user_id IN (SELECT user_id_1 AS id WHERE user_id_2 = ? UNION SELECT user_id_2 AS id WHERE user_id_1 = ?);

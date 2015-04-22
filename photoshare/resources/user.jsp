@@ -44,11 +44,11 @@
                         if (request.getParameter("user_id") != null && request.getParameter("self_id") != null) {
                             FriendController.makeFriends(user_.id, self_id);
             %>
-                        <h5>You are friends!</h5>
+                            <h5>You are friends!</h5>
             <%
                         } else if (FriendController.areFriends(user_.id, self_id)) {
             %>
-                        <h5>You are friends!</h5>
+                            <h5>You are friends!</h5>
             <%
                         } else if (self_id != user_.id) {
             %>

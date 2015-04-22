@@ -53,7 +53,7 @@
                             </form>
                         </div>
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="#">View Your Friends</a></li>
+                            <li class="list-group-item"><a href="/photoshare/AllFriendsHandler.jsp">View Your Friends</a></li>
                             <li class="list-group-item"><a href="#">View Your Tags</a></li>
                             <li class="list-group-item"><a href="#">View All Tags</a></li>
                             <li class="list-group-item"><a href="#">View Popular Tags</a></li>
