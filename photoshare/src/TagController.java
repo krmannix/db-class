@@ -16,6 +16,9 @@ public class TagController {
 						"WHERE tp.photo_id IN " +
 						"(SELECT p.picture_id FROM Pictures p WHERE p.album_id IN " +
 						"(SELECT a.album_id FROM Albums a WHERE a.user_id = ?))";
+	private static final String GET_RECOMMENDED_TAGS_1 = "SELECT DISTINCT t_.tag_name, t_.tag_id FROM tag t_ INNER JOIN tag_photo tp_ ON tp_.tag_id = t_.tag_id WHERE tp_.photo_id IN (SELECT tp.photo_id FROM tag_photo tp WHERE tp.tag_id IN (SELECT t.tag_id FROM tag t WHERE t.tag_name IN ("; 
+	private static final String GET_RECOMMENDED_TAGS_2 = ")) AND tp_.tag_id NOT IN (SELECT t.tag_id FROM tag t WHERE t.tag_name IN (";
+	private static final String GET_RECOMMENDED_TAGS_3 = ")));";
 
 	public static List<Tag> getAllTags() {
 		PreparedStatement stmt = null;
@@ -25,6 +28,48 @@ public class TagController {
 		try {
 			conn = DbConnection.getConnection();
 			stmt = conn.prepareStatement(GET_ALL_TAGS);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				allTags.add(new Tag(rs.getInt("tag_id"), rs.getString("tag_name")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+      		throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+		return allTags;
+	}
+
+	public static List<Tag> getRecommendedTags(String taglist) {
+		String[] broken_tags = taglist.split(",");
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		List<Tag> allTags = new ArrayList<Tag>();
+		StringBuilder builder = new StringBuilder("");
+    	for (int i = 0; i < broken_tags.length; i++) {
+    		builder.append("?,");
+    	}
+		try {
+			conn = DbConnection.getConnection();
+			String qs = builder.deleteCharAt(builder.length()-1).toString();
+			stmt = conn.prepareStatement(GET_RECOMMENDED_TAGS_1 + qs + GET_RECOMMENDED_TAGS_2 + qs + GET_RECOMMENDED_TAGS_3);
+			for (int i = 0; i < broken_tags.length; i++) {
+				stmt.setString(i+1, broken_tags[i].trim());
+				stmt.setString(i+1+broken_tags.length, broken_tags[i].trim());
+			}
 			rs = stmt.executeQuery();
 			while (rs.next()) {
 				allTags.add(new Tag(rs.getInt("tag_id"), rs.getString("tag_name")));

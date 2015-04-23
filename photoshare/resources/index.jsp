@@ -64,7 +64,7 @@
                             <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp">View All Tags</a></li>
                             <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp?popular=true">View Popular Tags</a></li>
                             <li class="list-group-item"><a href="/photoshare/recommendation.jsp">You May Also Like</a></li>
-                            <li class="list-group-item"><a href="#">Tag Recommendations</a></li>
+                            <li class="list-group-item"><a href="/photoshare/tagrecommendations.jsp">Tag Recommendations</a></li>
                             <li class="list-group-item"><a href="/photoshare/topusers.jsp">Activity Leaderboards</a></li>
                             <li class="list-group-item"><a href="/photoshare/delete.jsp">Delete Albums and Photos</a></li>
                         </ul>
@@ -72,6 +72,16 @@
                     </div>
                 </div>
                 <div class="col-sm-9">
+                    <!-- SEARCH BAR -->
+                    <form action="AllPhotosHandler.jsp">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search_term" placeholder="Search for tags" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Search</button>
+                            </spa>
+                        </div>
+                    </form>
+                    <!-- END SEARCH BAR -->
                     <h2>Create a new album!</h2>
                     <form action="createAlbum.jsp" method="post">
                         Name: <input type="text" name="album_name">

@@ -21,6 +21,8 @@ public class PictureDao {
 
   private static final String ALL_PICTURE_IDS_STMT = "SELECT \"picture_id\" FROM Pictures ORDER BY \"picture_id\" DESC";
 
+  private static final String TAG_PICTURE_IDS_STMT = "SELECT tp.photo_id FROM tag_photo tp INNER JOIN tag t ON t.tag_id = tp.tag_id WHERE t.tag_name ILIKE ?;";
+
   private static final String PICTURES_BY_ALBUM = "SELECT " +
       "\"caption\", \"imgdata\", \"thumbdata\", \"size\", \"content_type\", \"album_id\", \"picture_id\" FROM Pictures WHERE \"album_id\" = ?;";
 
@@ -182,6 +184,46 @@ public class PictureDao {
 			stmt.close();
 			stmt = null;
 
+			conn.close();
+			conn = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+
+		return picturesIds;
+	}
+
+	public List<Integer> allPicturesByTag(String tag) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		List<Integer> picturesIds = new ArrayList<Integer>();
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(TAG_PICTURE_IDS_STMT);
+			stmt.setString(1, '%' + tag + '%');
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				picturesIds.add(rs.getInt("photo_id"));
+			}
+			rs.close();
+			rs = null;
+			stmt.close();
+			stmt = null;
 			conn.close();
 			conn = null;
 		} catch (SQLException e) {
