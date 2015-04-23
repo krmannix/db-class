@@ -38,6 +38,10 @@ public class PictureDao {
 
   private static final String DELETE_PICTURE = "BEGIN; DELETE FROM Pictures WHERE picture_id = ?; DELETE FROM Comments WHERE photo_id = ?; DELETE FROM Likes WHERE photo_id = ?; DELETE FROM Tag_photo WHERE photo_id = ?; COMMIT;";
 
+  private static final String RECOMMENDED_TAGS = "SELECT tp.tag_id AS id, COUNT(*) AS counts FROM Tag_photo tp WHERE tp.photo_id IN (SELECT p.picture_id FROM Pictures p INNER JOIN Albums a ON a.album_id = p.album_id WHERE a.user_id = ?) GROUP BY tp.tag_id ORDER BY counts DESC LIMIT 5;";
+  private static final String RECOMMENDED_PHOTOS_1 = "select tp.photo_id, COUNT(*) AS counts from tag_photo tp INNER JOIN Pictures p ON p.picture_id = tp.photo_id WHERE tp.tag_id IN (";
+  private static final String RECOMMENDED_PHOTOS_2 = ") GROUP BY tp.photo_id ORDER BY counts DESC;";
+
   public Picture load(int id) {
 		PreparedStatement stmt = null;
 		Connection conn = null;
@@ -380,6 +384,68 @@ public class PictureDao {
 		        picture.setId(rs.getInt(7));
 		        allPics.add(picture);
 		      }
+
+			rs.close();
+			rs = null;
+
+			stmt.close();
+			stmt = null;
+
+			conn.close();
+			conn = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			if (rs != null) {
+				try { rs.close(); } catch (SQLException e) { ; }
+				rs = null;
+			}
+			if (stmt != null) {
+				try { stmt.close(); } catch (SQLException e) { ; }
+				stmt = null;
+			}
+			if (conn != null) {
+				try { conn.close(); } catch (SQLException e) { ; }
+				conn = null;
+			}
+		}
+
+		return allPics;
+	}
+
+	public List<Integer> getRecommendedPictures(int user_id) {
+		PreparedStatement stmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		
+		List<Integer> allPics = new ArrayList<Integer>();
+		try {
+			conn = DbConnection.getConnection();
+			stmt = conn.prepareStatement(RECOMMENDED_TAGS);
+			stmt.setInt(1, user_id);
+			rs = stmt.executeQuery();
+			int[] tags = new int[5];
+			int count = 0;
+			while (rs.next()) {
+		        tags[count] = rs.getInt("id");
+		        count++;
+		    }
+		    if (count > 0) {
+		    	StringBuilder builder = new StringBuilder("");
+		    	for (int i = 0; i < count; i++) {
+		    		builder.append("?,");
+		    	}
+		    	String combined = RECOMMENDED_PHOTOS_1 + builder.deleteCharAt(builder.length()-1).toString() + RECOMMENDED_PHOTOS_2;
+		    	stmt = conn.prepareStatement(combined);
+				for (int i = 0; i < count; i++) {
+		    		stmt.setInt(i+1, tags[i]);
+		    	}
+				rs = stmt.executeQuery();
+				while (rs.next()) {
+					allPics.add(rs.getInt("photo_id"));
+				}
+		    }
 
 			rs.close();
 			rs = null;
