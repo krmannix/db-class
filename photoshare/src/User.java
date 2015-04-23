@@ -22,6 +22,7 @@ public class User {
 	public String home_city;
 	public String home_state;
 	public String home_country;
+	public int total_points;
 
 	public User() {
 
@@ -67,6 +68,26 @@ public class User {
 		this.home_city = h_city;
 		this.home_country = h_country;
 		this.home_state = h_state;
+		// this.dob = new java.sql.Date(date.getTime());
+	}
+
+	public User(int user_id, String firstName, String lastName, String email, 
+				String password, boolean male, java.sql.Timestamp date,
+				String c_city, String c_state, String c_country, String h_city, String h_state, 
+				String h_country, int total) {
+		this.id = user_id;
+		this.first_name = firstName;
+		this.last_name = lastName;
+		this.email = email;
+		this.password = password;
+		this.male = male;
+		this.current_city = c_city;
+		this.current_country = c_country;
+		this.current_state = c_state;
+		this.home_city = h_city;
+		this.home_country = h_country;
+		this.home_state = h_state;
+		this.total_points = total;
 		// this.dob = new java.sql.Date(date.getTime());
 	}
 

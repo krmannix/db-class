@@ -64,7 +64,7 @@
                             <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp">View All Tags</a></li>
                             <li class="list-group-item"><a href="/photoshare/AllTagsHandler.jsp?popular=true">View Popular Tags</a></li>
                             <li class="list-group-item"><a href="#">Recommendations</a></li>
-                            <li class="list-group-item"><a href="#">Activity Leaderboards</a></li>
+                            <li class="list-group-item"><a href="/photoshare/topusers.jsp">Activity Leaderboards</a></li>
                             <li class="list-group-item"><a href="/photoshare/delete.jsp">Delete Albums and Photos</a></li>
                         </ul>
                       </div>

@@ -30,7 +30,7 @@
                     // Show the most popular tags
                     List<Tag> popTags = TagController.getPopularTags();
                     if (popTags.size() == 0) {
-                        %> <h2>There are no tags! Go Back <a href="/photoshare/index.jsp">home</a></h2> <%
+                        %> <h2>There are no used tags! Go Back <a href="/photoshare/index.jsp">home</a></h2> <%
                     } else {
                         %> <h2>Popular Tags </h2><br /><ol> <%
                             for (Tag t : popTags) {

@@ -101,19 +101,23 @@
                                 </li>
                         <%
                             }
+                            if (request.getUserPrincipal() != null) {
                         %>
-                            <li class="list-group-item">
-                                Add comment: 
-                                <div class="input-group">
-                                    <form action="photo.jsp">
-                                        <input type="text" class="form-control" placeholder="Add comment" name="comment_text">
-                                        <input type="hidden" name="photo_id" value="<%= photo_id %>">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit">Comment</button>
-                                        </span>
-                                    </form>
-                                </div>
-                            </li>
+                                <li class="list-group-item">
+                                    Add comment: 
+                                    <div class="input-group">
+                                        <form action="photo.jsp">
+                                            <input type="text" class="form-control" placeholder="Add comment" name="comment_text">
+                                            <input type="hidden" name="photo_id" value="<%= photo_id %>">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="submit">Comment</button>
+                                            </span>
+                                        </form>
+                                    </div>
+                                </li>
+                        <%
+                            }
+                        %>
                         </ul>
                     </div>
             <%
