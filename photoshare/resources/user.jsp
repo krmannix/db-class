@@ -42,6 +42,8 @@
                         <%= user_.first_name %>
                         <%= user_.last_name %>
                     </h1>
+                    <h4>Current Location: <%= user_.current_city %>, <%= user_.current_state %>, <%= user_.current_country %></h4>
+                    <h4>Home Location: <%= user_.home_city %>, <%= user_.home_state %>, <%= user_.home_country %></h4>
             <% 
                     if (request.getUserPrincipal() != null) {
                         int self_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());

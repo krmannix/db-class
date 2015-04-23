@@ -42,7 +42,7 @@
 	                for (Picture picture : allPics) {
 	                	int pictureId = picture.getId();
         	%>
-        				<a href="/photoshare/img?picture_id=<%= pictureId %>">
+        				<a href="/photoshare/photo.jsp?photo_id=<%= pictureId %>">
                             <img src="/photoshare/img?t=1&picture_id=<%= pictureId %>"/>
                         </a>
         	<%

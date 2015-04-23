@@ -37,6 +37,7 @@
         <div class="container">
             <% if (request.getParameter("photo_id") != null) {
                     int photo_id = Integer.parseInt(request.getParameter("photo_id"));
+                    User photo_user = UserController.getUserByPhotoId(photo_id);
                     if (request.getParameter("like") != null && request.getUserPrincipal() != null) {
                         if (request.getParameter("like").equals("like")) {
                             int user_id = UserController.getUserIdByEmail(request.getUserPrincipal().getName());
@@ -60,6 +61,9 @@
                         <img src="/photoshare/img?picture_id=<%= photo_id %>" />
                         <br />
                         <br />
+                        <h4>
+                            Photo by <a href="/photoshare/user.jsp?user_id=<%= photo_user.id%>"><%= photo_user.first_name %> <%=  photo_user.last_name %></a>
+                        </h4>
                         <br />
                         <span class="badge"><%= numLikes %></span> likes for this photo
                         <%

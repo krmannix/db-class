@@ -8,7 +8,7 @@ public class TagController {
 	private static final String INSERT_TAG = "INSERT INTO Tag (tag_name) VALUES (?) RETURNING tag_id;";
 	private static final String INSERT_TAG_PHOTO = "INSERT INTO Tag_photo (tag_id, photo_id) VALUES (?, ?);";
 	private static final String GET_ALL_TAGS = "SELECT * FROM Tag";
-	private static final String GET_POPULAR_TAGS = "SELECT t.* FROM Tag t INNER JOIN (SELECT tp.tag_id, COUNT(*) AS numPhotos FROM Tag_photo tp GROUP BY tp.tag_id ORDER BY numPhotos DESC LIMIT 10 OFFSET 0) p ON t.tag_id = p.tag_id;";
+	private static final String GET_POPULAR_TAGS = "SELECT t.* FROM Tag t INNER JOIN (SELECT tp.tag_id, COUNT(*) AS numPhotos FROM Tag_photo tp GROUP BY tp.tag_id ORDER BY numPhotos DESC LIMIT 10 OFFSET 0) p ON t.tag_id = p.tag_id ORDER BY p.numPhotos DESC;";
 	private static final String GET_TAG_BY_NAME = "SELECT * FROM Tag WHERE tag_name = ?;";
 	private static final String GET_TAG_BY_ID = "SELECT * FROM Tag WHERE tag_id = ?;";
 	private static final String GET_ALL_TAGS_BY_USER = "SELECT t.* FROM Tag t " +

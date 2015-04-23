@@ -44,11 +44,12 @@
 						<h2>Sign up</h2>
 						<form method="POST" action="RegistrationHandler.jsp">
 						    <table>
+						    	<tr><th>* means optional</th></tr>
 						    	<tr><th>First Name</th><td><input type="text" name="firstName"></td></tr>
 						    	<tr><th>Last Name</th><td><input type="text" name="lastName"></td></tr>
 						        <tr><th>Email</th><td><input type="text" name="email"></td></tr>
 						        <tr><th>Password</th><td><input type="password" name="password"></td></tr>
-						        <tr><th>Gender</th><td>
+						        <tr><th>Gender *</th><td>
 						        	<select name="gender">
 						        		<option value="0">Female</option>
 						        		<option value="1">Male</option>
@@ -104,12 +105,12 @@
 						        	</select>
 						        	<input type=text name="year" size=4 value=1993>
 						        </td></tr>
-						        <tr><th>Home City</th><td><input type="text" name="h_city"></td></tr>
-						        <tr><th>Home State</th><td><input type="text" size=2 maxlength="2" name="h_state"></td></tr>
-						        <tr><th>Home Country</th><td><input type="text" name="h_country"></td></tr>
-						        <tr><th>Current City</th><td><input type="text" name="c_city"></td></tr>
-						        <tr><th>Current State</th><td><input type="text" size=2 maxlength="2" name="c_state"></td></tr>
-						        <tr><th>Current Country</th><td><input type="text" name="c_country"></td></tr>
+						        <tr><th>Home City *</th><td><input type="text" name="h_city"></td></tr>
+						        <tr><th>Home State *</th><td><input type="text" size=2 maxlength="2" name="h_state"></td></tr>
+						        <tr><th>Home Country *</th><td><input type="text" name="h_country"></td></tr>
+						        <tr><th>Current City *</th><td><input type="text" name="c_city"></td></tr>
+						        <tr><th>Current State *</th><td><input type="text" size=2 maxlength="2" name="c_state"></td></tr>
+						        <tr><th>Current Country *</th><td><input type="text" name="c_country"></td></tr>
 						        <tr><td colspan="2" align="right"><input type="submit" value="Submit"/>
 						        </td></tr>
 						    </table>
