@@ -65,12 +65,12 @@ public class RegistrationController {
     							String c_city, String c_state, String c_country, String h_city, String h_state, 
     							String h_country) {
 
-		if (doesUserExist(email)) return false;
-    	else if (firstName.length() == 0) return false;
-    	else if (lastName.length() == 0) return false;
-    	else if (email.length() == 0) return false;
-    	else if (password.length() == 0) return false;
-    	else if (gender.length() == 0) return false;
+		
+    	if (firstName == null || firstName.length() == 0) return false;
+    	else if (lastName == null || lastName.length() == 0) return false;
+    	else if (email == null || email.length() == 0) return false;
+    	else if (doesUserExist(email)) return false;
+    	else if (password == null || password.length() == 0) return false;
     	else if (bday == null || bmonth == null || byear == null) return false;
     	else return true;
     }

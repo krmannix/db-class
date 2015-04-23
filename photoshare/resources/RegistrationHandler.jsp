@@ -14,10 +14,10 @@
 			String lastName = request.getParameter("lastName");
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
-			String gender = request.getParameter("gender");
 			String bday = request.getParameter("day");
 			String bmonth = request.getParameter("month");
 			String byear = request.getParameter("year");
+			String gender = request.getParameter("gender");
 			String c_city = request.getParameter("c_city");
 			String c_state = request.getParameter("c_state");
 			String c_country = request.getParameter("c_country");
